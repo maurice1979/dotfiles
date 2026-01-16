@@ -15,10 +15,12 @@ A modular, dictionary-driven dotfiles management system built for Python develop
 
 ```text
 .
-├── bootstrap.sh    # One-click installation script
-├── homely.py       # Main configuration logic & symlinking
-├── starship.toml   # Starship prompt configuration
-├── .zshrc          # Shell configuration
+├── bootstrap.sh      # One-click installation script
+├── homely.py         # Main configuration logic, symlinking, and app syncing
+├── starship.toml     # Starship prompt configuration
+├── .zshrc            # Shell configuration
+├── git/
+│   └── ignore        # Global git ignore patterns
 └── vscode/
     └── settings.json # VSCode user preferences
 ```
