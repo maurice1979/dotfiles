@@ -27,6 +27,10 @@ DOTFILES_DICT = {
         "from": "git/ignore",
         "to": "~/.config/git/ignore",
     },
+    "ipython_startup": {
+        "from": "ipython/00-first.py",
+        "to": "~/.ipython/profile_default/startup/00-first.py",
+    },
 }
 
 # 2. Configuration: CLI Tools (Homebrew Formulae)
@@ -61,8 +65,8 @@ VSCODE_EXTS = [
     "ms-toolsai.jupyter",
 ]
 
-# 5. Configuration: Python Global Tools
-PYTHON_TOOLS = ["black", "ruff", "mypy"]
+# 5. Configuration: Python Global Tools (via uv)
+PYTHON_TOOLS: list[str] = ["black", "ruff", "mypy"]
 
 # Track results for the final summary
 summary_data = []
@@ -72,7 +76,12 @@ summary_data = []
 # ---------------------------------------------------------
 
 # A. Ensure Directories Exist
-config_dirs = ["~/.config", "~/Library/Application Support/Code/User", "~/.config/git"]
+config_dirs = [
+    "~/.config",
+    "~/.config/git",
+    "~/Library/Application Support/Code/User",
+    "~/.ipython/profile_default/startup",
+]
 for d in config_dirs:
     mkdir(d)
 
@@ -100,12 +109,11 @@ for item, config in DOTFILES_DICT.items():
 if shutil.which("brew"):
     print("🍺 Syncing CLI Tools...")
     for formula in BREW_FORMULAE:
+        status = "✅"
         if not shutil.which(formula):
             print(f"  🚀 Installing {formula}...")
             execute(["brew", "install", formula])
-            summary_data.append((formula, "brew install", "✅"))
-        else:
-            summary_data.append((formula, "brew install", "✅"))
+        summary_data.append((formula, "brew install", status))
 
 # D. Process GUI Apps (Casks)
 if shutil.which("brew") and platform.system() == "Darwin":
@@ -116,14 +124,11 @@ if shutil.which("brew") and platform.system() == "Darwin":
         if not app_exists:
             print(f"  🚀 Installing {cask}...")
             execute(["brew", "install", "--cask", cask])
-            summary_data.append((cask, "/Applications", "✅"))
-        else:
-            summary_data.append((cask, "/Applications", "✅"))
+        summary_data.append((cask, "/Applications", "✅"))
 
 # E. Process VS Code Extensions
 if shutil.which("code"):
     print("🔌 Syncing VS Code Extensions...")
-    # Get list of installed exts to skip re-installing
     _, stdout, _ = execute(["code", "--list-extensions"], stdout=True)
     installed_exts = [line.lower() for line in stdout.decode().splitlines()]
 
@@ -133,12 +138,18 @@ if shutil.which("code"):
             execute(["code", "--install-extension", ext])
         summary_data.append((ext.split(".")[-1], "VS Code Ext", "✅"))
 
-# F. Global Python Tools via uv
-uv_path = shutil.which("uv") or Path.home() / ".local/bin/uv"
+# F. Global Python Tools & JupyterLab via uv
+uv_path: str | Path = shutil.which("uv") or Path.home() / ".local/bin/uv"
 if uv_path:
     print("🐍 Syncing Python tools...")
     for tool in PYTHON_TOOLS:
         execute([str(uv_path), "tool", "install", tool])
+
+    print("📊 Installing JupyterLab with Data Plugins...")
+    execute(
+        [str(uv_path), "tool", "install", "jupyterlab", "--with", "duckdb", "--with", "pandas", "--with", "jupysql"]
+    )
+    summary_data.append(("jupyterlab", "uv tool (ds bundle)", "✅"))
     summary_data.append(("python_tools", "uv tool install", "✅"))
 
 # G. Final System Configs
