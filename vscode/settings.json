@@ -1,0 +1,61 @@
+{
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "editor.rulers": [
+        120,
+    ],
+    // Specific settings. Added 2026-01-02
+    "editor.fontSize": 14, // Added 2026-01-02
+    // Python settings
+    "python.venvPath": "~/venvs",
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source. fixAll": "explicit",
+            "source.organizeImports": "explicit"
+        }
+    },
+    "python.analysis.inlayHints.variableTypes": true,
+    "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.analysis.typeCheckingMode": "off", // Disable Pylance Checking so MyPy
+    // End Of Specific settings.
+    "autoDocstring.docstringFormat": "numpy",
+    "cSpell.userWords": [
+        "datalake",
+        "datawarehouse",
+        "docstrings",
+        "dotenv",
+        "DTLK",
+        "ducklake",
+        "fetchdf",
+        "jvidal",
+        "killpg",
+        "MAINT",
+        "preexec",
+        "PSWD",
+        "pushdown",
+        "setsid",
+        "subfolders",
+    ],
+    "github.copilot.enable": {
+        "*": false,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false,
+        "python": false
+    },
+    "ruff.configuration": "",
+    "ruff.lineLength": 120,
+    "explorer.confirmDragAndDrop": false,
+    "terminal.integrated.enableMultiLinePasteWarning": "never",
+    "trivy.binaryPath": "/Users/jvidal/.vscode/extensions/aquasecurityofficial.trivy-vulnerability-scanner-1.8.1/trivy",
+    "geminicodeassist.project": "gen-lang-client-0557981886",
+    "diffEditor.codeLens": true,
+    "python.defaultInterpreterPath": "/opt/homebrew/bin/python3",
+    "git.replaceTagsWhenPull": true,
+    "editor.fontFamily": "Menlo, Monaco, 'Courier New', monospace, 'Hack Nerd Font'",
+    "gitlens.ai.model": "vscode",
+    "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+    "geminicodeassist.displayInlineContextHint": false
+}
