@@ -41,8 +41,8 @@ homely add .
 homely update
 
 echo ""
-print "===================================================="
+echo "===================================================="
 echo "🎉 Bootstrap complete!"
 echo "👉 Restart your terminal or run: source ~/.zshrc"
 echo "👉 Then run 'upsync' to verify everything."
-print "===================================================="
+echo "===================================================="
