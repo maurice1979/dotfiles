@@ -99,6 +99,7 @@ If you find yourself needing a new library (like `matplotlib` or `scipy`) across
         "--with", "jupysql",
         "--with", "matplotlib"  # Add it here!
     ])
+````
 
 ### 🔍 Customization
 
