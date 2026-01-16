@@ -103,7 +103,7 @@ If you find yourself needing a new library (like `matplotlib` or `scipy`) across
 
 ### 🔍 Customization
 
-To modify your auto-imports or Pandas display settings, edit: ipython/00-first.py
+To modify your auto-imports or Pandas display settings, edit: `ipython/00-first.py`
 
 ## 📋 Requirements
 
