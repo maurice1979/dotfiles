@@ -62,6 +62,48 @@ This repo uses a central homely.py file. To add new tools, simply update the rel
 
 Since `homely` is installed globally a uv tool, you can invoke it from any location.
 
+## 📊 JupyterLab & Data Science Setup
+
+This environment is optimized for data engineering and analysis using **uv** and **DuckDB**.
+
+### 🛠️ Installation
+JupyterLab is managed as a standalone tool via `uv`. The `homely.py` script automatically bundles essential data plugins:
+- **DuckDB & JupySQL:** For high-performance SQL analysis.
+- **Pandas & NumPy:** For data manipulation.
+
+### 🚀 Automatic Imports (IPython Startup)
+To save time, a startup script is symlinked to `~/.ipython/profile_default/startup/00-first.py`. 
+
+Every time you open a Jupyter Notebook or IPython shell, the following are pre-loaded:
+- `import pandas as pd` (with optimized display settings)
+- `import numpy as np`
+- `import duckdb`
+- `%load_ext sql` (configured for DuckDB + Pandas)
+
+### 💡 Usage
+To start your data environment, simply run:
+```bash
+jupyter-lab
+```
+
+> Note: Avoid using uv run for general exploration, as it creates isolated environments that may ignore your global startup configs. Use the global jupyter-lab tool for the best experience.
+
+### Pro-Tip: Adding new libraries to Jupyter
+If you find yourself needing a new library (like `matplotlib` or `scipy`) across all your notebooks, you don't need to change your project files. Just update the `uv tool install` line in `homely.py`:
+
+```python
+    execute([
+        str(uv_path), "tool", "install", "jupyterlab", 
+        "--with", "duckdb", 
+        "--with", "pandas", 
+        "--with", "jupysql",
+        "--with", "matplotlib"  # Add it here!
+    ])
+
+### 🔍 Customization
+
+To modify your auto-imports or Pandas display settings, edit: ipython/00-first.py
+
 ## 📋 Requirements
 
 - **OS**: macOS (Current logic uses brew and Mac-specific VSCode paths).
