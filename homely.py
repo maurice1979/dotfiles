@@ -136,7 +136,7 @@ if shutil.which("code"):
 # F. Global Python Tools via uv
 uv_path = shutil.which("uv") or Path.home() / ".local/bin/uv"
 if uv_path:
-    print(f"🐍 Syncing Python tools...")
+    print("🐍 Syncing Python tools...")
     for tool in PYTHON_TOOLS:
         execute([str(uv_path), "tool", "install", tool])
     summary_data.append(("python_tools", "uv tool install", "✅"))
@@ -151,13 +151,13 @@ summary_data.append(("git_configs", "global settings", "✅"))
 # FINAL SUMMARY REPORT
 # ---------------------------------------------------------
 
-print("\n" + "=" * 80)
+print("\n" + "=" * 77)
 print(f"{'Item':<25} | {'Destination/Action':<40} | {'Status'}")
-print("-" * 80)
+print("-" * 77)
 for item, dest, stat in summary_data:
     display_path = dest.replace(str(Path.home()), "~")
     if len(display_path) > 37:
         display_path = display_path[:37] + "..."
     print(f"{item:<25} | {display_path:<40} | {stat}")
-print("=" * 80)
-print("✨ Environment sync complete!\n")
+print("=" * 77)
+print("\n✨ Environment sync complete!\n")
