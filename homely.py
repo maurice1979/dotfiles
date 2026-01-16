@@ -39,6 +39,7 @@ BREW_FORMULAE = [
     "ffmpeg",
     "gh",
     "jq",
+    "postgresql@14",
     "tree",
     "wget",
     "zsh-autosuggestions",
@@ -50,6 +51,7 @@ BREW_CASKS = [
     "visual-studio-code",
     "font-hack-nerd-font",
     "ghostty",
+    "keepassxc",
     "rectangle",
     "slack",
     "spotify",
@@ -138,7 +140,7 @@ if shutil.which("code"):
             execute(["code", "--install-extension", ext])
         summary_data.append((ext.split(".")[-1], "VS Code Ext", "✅"))
 
-# F. Global Python Tools & JupyterLab via uv
+# F.1 Global Python Tools & JupyterLab via uv
 uv_path: str | Path = shutil.which("uv") or Path.home() / ".local/bin/uv"
 if uv_path:
     print("🐍 Syncing Python tools...")
@@ -151,6 +153,38 @@ if uv_path:
     )
     summary_data.append(("jupyterlab", "uv tool (ds bundle)", "✅"))
     summary_data.append(("python_tools", "uv tool install", "✅"))
+
+# F.2 Safety Check: KeePassXC Database presence
+KEEPASS_DB_RELATIVE_PATH = "Library/CloudStorage/GoogleDrive-is.maurice@gmail.com/My Drive/keypass/maupass.kdbx"
+
+print("🔐 Checking KeePassXC Database...")
+db_path: Path = Path.home() / KEEPASS_DB_RELATIVE_PATH
+
+if db_path.exists():
+    print(f"  ✅ Database found at {KEEPASS_DB_RELATIVE_PATH}")
+    summary_data.append(("keepass_db", "File exists", "✅"))
+else:
+    print(f"  ⚠️  Warning: Database NOT found at {db_path}")
+    print("     Ensure your cloud sync (Dropbox/iCloud) is signed in.")
+    summary_data.append(("keepass_db", "File missing", "⚠️"))
+
+# F.3 PostgreSQL Service Logic
+if shutil.which("brew") and "postgresql@14" in BREW_FORMULAE:
+    print("🐘 Managing PostgreSQL service...")
+    # Get status of services
+    _, stdout, _ = execute(["brew", "services", "list"], stdout=True)
+    services_list = stdout.decode()
+
+    # If the service isn't running, start it
+    if "postgresql@14" not in services_list or "started" not in services_list:
+        print("  🚀 Starting postgresql@14...")
+        execute(["brew", "services", "start", "postgresql@14"])
+        summary_data.append(("postgres_service", "Started", "✅"))
+    else:
+        # Optimization: If we just ran brew upgrade, a restart ensures the new version is active
+        print("  ♻️  Restarting postgresql@14 to apply any upgrades...")
+        execute(["brew", "services", "restart", "postgresql@14"])
+        summary_data.append(("postgres_service", "Restarted/Running", "✅"))
 
 # G. Final System Configs
 print("🔧 Configuring Git...")

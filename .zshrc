@@ -7,6 +7,7 @@ fi
 export PATH="$HOME/.local/bin:$PATH"
 
 # 3. PYTHON / UV CONFIGURATION
+export PATH="$HOME/.local/bin:$PATH"
 if [[ -f "$HOME/.cargo/env" ]]; then
     source "$HOME/.cargo/env"
 fi
@@ -28,5 +29,7 @@ fi
 
 # 6. ALIASES & USER CONFIG
 export EDITOR='code --wait'
+
+alias upsync="brew update && brew upgrade && homely update && source ~/.zshrc"
 # alias py="python3"
 # ssh-add --apple-use-keychain ~/.ssh/id_ed25519 2>/dev/null

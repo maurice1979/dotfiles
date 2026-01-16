@@ -51,7 +51,7 @@ This repo uses a central homely.py file. To add new tools, simply update the rel
 
 * `DOTFILES_DICT`: For files that need to be symlinked (e.g., config files).
 * `BREW_FORMULAE`: For command-line tools (e.g., `jq`, `gh`).
-* `BREW_CASKS`: For GUI applications (e.g., `slack`, `spotify`).
+* `BREW_CASKS`: For GUI applications (e.g., `slack`, `spotify`, `keepassxc`, `postgresql@14`).
 * `VSCODE_EXTS`: For VS Code extensions (e.g., `ms-python.python`).
 * `PYTHON_TOOLS`: For global Python CLI tools managed by `uv`.
 
@@ -99,11 +99,30 @@ If you find yourself needing a new library (like `matplotlib` or `scipy`) across
         "--with", "jupysql",
         "--with", "matplotlib"  # Add it here!
     ])
-````
+```
 
 ### 🔍 Customization
 
 To modify your auto-imports or Pandas display settings, edit: `ipython/00-first.py`
+
+## Alias
+
+### `upsync`
+
+The command executes the following sequence:
+
+* **System Packages**: Updates Homebrew and upgrades all installed formulae and casks (including Ghostty, Slack, etc.).
+* **Python Toolchain**: Updates the `uv` binary to the latest version.
+* **Environment Sync**: Runs homely update to apply any changes made to your `homely.py` or dotfiles.
+*** Reload**: Re-sources your `.zshrc` so new settings take effect immediately.
+
+Usage:
+
+Simply type the following in any terminal:
+
+```bash
+upsync
+```
 
 ## 📋 Requirements
 
