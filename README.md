@@ -55,7 +55,7 @@ This repo uses a central homely.py file. To add new tools, simply update the rel
 
 ## Updating the dotfiles
 
-1 - Add a new entry to the `DOTFILES_DICT` in `homely.py``
+1 - Add a new entry to the `DOTFILES_DICT` in `homely.py`
 2 - Execute `homely update`
 
 Since `homely` is installed globally a uv tool, you can invoke it from any location.
