@@ -151,13 +151,13 @@ summary_data.append(("git_configs", "global settings", "✅"))
 # FINAL SUMMARY REPORT
 # ---------------------------------------------------------
 
-print("\n" + "=" * 75)
+print("\n" + "=" * 80)
 print(f"{'Item':<25} | {'Destination/Action':<40} | {'Status'}")
-print("-" * 75)
+print("-" * 80)
 for item, dest, stat in summary_data:
     display_path = dest.replace(str(Path.home()), "~")
     if len(display_path) > 37:
         display_path = display_path[:37] + "..."
     print(f"{item:<25} | {display_path:<40} | {stat}")
-print("=" * 75)
+print("=" * 80)
 print("✨ Environment sync complete!\n")
