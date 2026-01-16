@@ -4,11 +4,12 @@ A modular, dictionary-driven dotfiles management system built for Python develop
 
 ## 🚀 Features
 
-* **Logic-Driven:** Configuration managed via `homely.py` (standard Python 3).
-* **Auto-Installation:** Automatically installs missing binaries (Starship, etc.) via Homebrew.
-* **Python Toolchain:** Uses `uv tool` to manage global isolated environments for tools like `black`, `ruff`, and `mypy`.
-* **VSCode Sync:** Manages `settings.json` and ensures the pathing for macOS is handled correctly.
-* **Fast Bootstrap:** A single shell script to go from a fresh OS to a fully configured environment.
+* **Logic-Driven**: Configuration managed via `homely.py` (standard Python 3).
+* **App & Tool Automation**: Automatically syncs Homebrew Formulae (CLI) and Casks (GUI).
+* **VS Code Sync**: Manages `settings.json` and automatically installs your favorite extensions via the code CLI.
+* **Python Toolchain**: Uses uv tool to manage global isolated environments for tools like `black`, `ruff`, and `mypy`.
+* **Git Global Config**: Automatically sets up global `.gitignore` and configures `VS Code` as your default editor.
+* **Fast Bootstrap:**: A single shell script to go from a fresh OS to a fully configured environment.
 
 ## 📂 Structure
 
@@ -35,38 +36,34 @@ chmod +x bootstrap.sh
 
 What the Bootstrap does:
 
-- Installs Homebrew (if missing).
-
-- Installs uv for high-performance Python package management.
-
-- Installs Homely as a global tool.
-
-- Runs homely update to create symlinks and install dependencies.
+* Installs **Homebrew** (if missing).
+* Installs **uv** for high-performance Python package management.
+* Installs **Homely** as a global tool.
+* Runs `homely update` to create symlinks and install dependencies.
 
 
 ## ⚙️ Configuration Logic
 
-This repo uses a central DOTFILES_DICT in homely.py. To add a new config file, just add an entry:
-Python
 
-```
-"tool_name": {
-    "from": "source_in_repo",
-    "to": "~/path/to/destination",
-    "bin": "command_to_check",
-    "install_cmd": "brew install tool_name"
-}
-```
+This repo uses a central homely.py file. To add new tools, simply update the relevant list:
+
+* `DOTFILES_DICT`: For files that need to be symlinked (e.g., config files).
+* `BREW_FORMULAE`: For command-line tools (e.g., `jq`, `gh`).
+* `BREW_CASKS`: For GUI applications (e.g., `slack`, `spotify`).
+* `VSCODE_EXTS`: For VS Code extensions (e.g., `ms-python.python`).
+* `PYTHON_TOOLS`: For global Python CLI tools managed by `uv`.
 
 ## Updating the dotfiles
 
 1 - Add a new entry to the `DOTFILES_DICT` in `homely.py``
 2 - Execute `homely update`
 
+Since `homely` is installed globally a uv tool, you can invoke it from any location.
+
 ## 📋 Requirements
 
-- OS: macOS (Current logic uses brew and Mac-specific VSCode paths).
-- Shell: Zsh (with Starship prompt).
-- Python: 3.10+ (managed via uv).
+- **OS**: macOS (Current logic uses brew and Mac-specific VSCode paths).
+- **Shell**: Zsh (with Starship prompt).
+- **Python**: 3.10+ (managed via `uv`).
 
 Built with ❤️ and Python.
