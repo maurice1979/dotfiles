@@ -47,7 +47,7 @@ What the Bootstrap does:
 ## ⚙️ Configuration Logic
 
 
-This repo uses a central homely.py file. To add new tools, simply update the relevant list:
+This repo uses a central `homely.py` file. To add new tools, simply update the relevant list:
 
 * `DOTFILES_DICT`: For files that need to be symlinked (e.g., config files).
 * `BREW_FORMULAE`: For command-line tools (e.g., `jq`, `gh`).
@@ -58,6 +58,7 @@ This repo uses a central homely.py file. To add new tools, simply update the rel
 ## Updating the dotfiles
 
 1 - Add a new entry to the `DOTFILES_DICT` in `homely.py`
+
 2 - Execute `homely update`
 
 Since `homely` is installed globally a uv tool, you can invoke it from any location.
