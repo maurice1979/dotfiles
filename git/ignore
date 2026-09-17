@@ -26,3 +26,4 @@ Temporary Items
 
 # Python 
 *.pyc
+**/.claude/settings.local.json

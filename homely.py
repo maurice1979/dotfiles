@@ -39,7 +39,7 @@ BREW_FORMULAE = [
     "ffmpeg",
     "gh",
     "jq",
-    "postgresql@14",
+    "postgresql",
     "tree",
     "wget",
     "zsh-autosuggestions",
@@ -55,6 +55,7 @@ BREW_CASKS = [
     "rectangle",
     "slack",
     "spotify",
+    "docker",
 ]
 
 # 4. Configuration: VS Code Extensions
@@ -135,13 +136,28 @@ if shutil.which("code"):
     installed_exts = [line.lower() for line in stdout.decode().splitlines()]
 
     for ext in VSCODE_EXTS:
+        status = "✅"
         if ext.lower() not in installed_exts:
             print(f"  🚀 Installing extension: {ext}...")
-            execute(["code", "--install-extension", ext])
-        summary_data.append((ext.split(".")[-1], "VS Code Ext", "✅"))
+            # Some extension dependencies can fail with exit code 1 even though
+            # the system is in a valid state (e.g. built-in copilot chat is newer).
+            retcode, out, err = execute(
+                ["code", "--install-extension", ext],
+                stdout=True,
+                stderr=True,
+                expectexit=(0, 1),
+            )
+            if retcode != 0:
+                output_text = ((out or b"") + b"\n" + (err or b"")).decode("utf-8", errors="replace").lower()
+                if "built-in extension" in output_text and "cannot be downgraded" in output_text:
+                    print(f"  ⚠️  Skipping {ext}: a newer built-in dependency is already present.")
+                    status = "⚠️ Built-in newer"
+                else:
+                    raise SystemError(f"Failed installing extension {ext}.\n{output_text.strip()}")
+        summary_data.append((ext.split(".")[-1], "VS Code Ext", status))
 
 # F.1 Global Python Tools & JupyterLab via uv
-uv_path: str | Path = shutil.which("uv") or Path.home() / ".local/bin/uv"
+uv_path = shutil.which("uv") or Path.home() / ".local/bin/uv"
 if uv_path:
     print("🐍 Syncing Python tools...")
     for tool in PYTHON_TOOLS:
@@ -169,21 +185,25 @@ else:
     summary_data.append(("keepass_db", "File missing", "⚠️"))
 
 # F.3 PostgreSQL Service Logic
-if shutil.which("brew") and "postgresql@14" in BREW_FORMULAE:
+if shutil.which("brew") and "postgresql" in BREW_FORMULAE:
     print("🐘 Managing PostgreSQL service...")
     # Get status of services
     _, stdout, _ = execute(["brew", "services", "list"], stdout=True)
     services_list = stdout.decode()
 
+    # Find the postgresql line specifically, so an unrelated "started" service
+    # elsewhere in the list can't be mistaken for postgresql already running.
+    pg_line = next((line for line in services_list.splitlines() if line.startswith("postgresql")), "")
+
     # If the service isn't running, start it
-    if "postgresql@14" not in services_list or "started" not in services_list:
-        print("  🚀 Starting postgresql@14...")
-        execute(["brew", "services", "start", "postgresql@14"])
+    if "started" not in pg_line:
+        print("  🚀 Starting postgresql...")
+        execute(["brew", "services", "start", "postgresql"])
         summary_data.append(("postgres_service", "Started", "✅"))
     else:
         # Optimization: If we just ran brew upgrade, a restart ensures the new version is active
-        print("  ♻️  Restarting postgresql@14 to apply any upgrades...")
-        execute(["brew", "services", "restart", "postgresql@14"])
+        print("  ♻️  Restarting postgresql to apply any upgrades...")
+        execute(["brew", "services", "restart", "postgresql"])
         summary_data.append(("postgres_service", "Restarted/Running", "✅"))
 
 # G. Final System Configs

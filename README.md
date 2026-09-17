@@ -50,10 +50,12 @@ What the Bootstrap does:
 This repo uses a central `homely.py` file. To add new tools, simply update the relevant list:
 
 * `DOTFILES_DICT`: For files that need to be symlinked (e.g., config files).
-* `BREW_FORMULAE`: For command-line tools (e.g., `jq`, `gh`).
-* `BREW_CASKS`: For GUI applications (e.g., `slack`, `spotify`, `keepassxc`, `postgresql@14`).
+* `BREW_FORMULAE`: For command-line tools (e.g., `jq`, `gh`, `postgresql`).
+* `BREW_CASKS`: For GUI applications (e.g., `slack`, `spotify`, `keepassxc`, `docker`).
 * `VSCODE_EXTS`: For VS Code extensions (e.g., `ms-python.python`).
 * `PYTHON_TOOLS`: For global Python CLI tools managed by `uv`.
+
+> **Note:** anything referenced from `.zshrc` must have a matching install step above it (a `BREW_FORMULAE`/`BREW_CASKS` entry, etc.), or a shell block will point at a program that was never installed. SDKMAN is the one exception here: its official installer isn't Homebrew-based, so it's sourced defensively in `.zshrc` (only if `~/.sdkman` already exists) and must still be installed manually — see https://sdkman.io/install.
 
 ## Updating the dotfiles
 

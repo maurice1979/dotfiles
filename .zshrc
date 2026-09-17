@@ -33,3 +33,15 @@ export EDITOR='code --wait'
 alias upsync="brew update && brew upgrade && homely update && source ~/.zshrc"
 # alias py="python3"
 # ssh-add --apple-use-keychain ~/.ssh/id_ed25519 2>/dev/null
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/jordi/.docker/completions $fpath)
+autoload -Uz compinit
+(( ${+_comps[docker]} )) || compinit
+# End of Docker CLI completions
+
+
+export PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
