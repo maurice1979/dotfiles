@@ -64,5 +64,6 @@
         "*.tsv": "duckdb.dataFileViewer",
         "*.xlsx": "duckdb.dataFileViewer"
     },
-    "claudeCode.preferredLocation": "panel"
+    "claudeCode.preferredLocation": "panel",
+    "hediet.vscode-drawio.resizeImages": null
 }
