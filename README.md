@@ -43,6 +43,7 @@ What the Bootstrap does:
 * Installs **Homely** as a global tool.
 * Runs `homely update` to create symlinks and install dependencies.
 
+> **Manual step required:** Docker Desktop is installed as a cask, but it won't actually run until you open `Docker.app` once by hand and approve its privileged helper install (macOS requires this to happen interactively — it can't be scripted). Do this before relying on `docker` from the shell.
 
 ## ⚙️ Configuration Logic
 

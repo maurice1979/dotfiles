@@ -50,7 +50,6 @@
     "explorer.confirmDragAndDrop": false,
     "terminal.integrated.enableMultiLinePasteWarning": "never",
     "terminal.integrated.fontFamily": "Hack Nerd Font Mono, Hack Nerd Font, Menlo, Monaco, 'Courier New', monospace",
-    "trivy.binaryPath": "/Users/jvidal/.vscode/extensions/aquasecurityofficial.trivy-vulnerability-scanner-1.8.1/trivy",
     "geminicodeassist.project": "gen-lang-client-0557981886",
     "diffEditor.codeLens": true,
     "python.defaultInterpreterPath": "/opt/homebrew/bin/python3",

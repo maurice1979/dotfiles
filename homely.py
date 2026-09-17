@@ -122,9 +122,11 @@ if shutil.which("brew"):
 if shutil.which("brew") and platform.system() == "Darwin":
     print("🖥️  Syncing GUI Applications...")
     for cask in BREW_CASKS:
-        app_search_name = cask.replace("-", " ").title()
-        app_exists = any(Path("/Applications").glob(f"{app_search_name}*.app"))
-        if not app_exists:
+        # `brew list --cask` is the source of truth for "already installed", unlike
+        # guessing an /Applications/*.app name (which never matches app-less casks
+        # like fonts, forcing a redundant install attempt on every run).
+        retcode, _, _ = execute(["brew", "list", "--cask", cask], stdout=True, stderr=True, expectexit=(0, 1))
+        if retcode != 0:
             print(f"  🚀 Installing {cask}...")
             execute(["brew", "install", "--cask", cask])
         summary_data.append((cask, "/Applications", "✅"))

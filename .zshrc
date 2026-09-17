@@ -34,7 +34,7 @@ alias upsync="brew update && brew upgrade && homely update && source ~/.zshrc"
 # alias py="python3"
 # ssh-add --apple-use-keychain ~/.ssh/id_ed25519 2>/dev/null
 # The following lines have been added by Docker Desktop to enable Docker CLI completions.
-fpath=(/Users/jordi/.docker/completions $fpath)
+fpath=($HOME/.docker/completions $fpath)
 autoload -Uz compinit
 (( ${+_comps[docker]} )) || compinit
 # End of Docker CLI completions
