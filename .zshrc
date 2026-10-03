@@ -45,3 +45,9 @@ export PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+# Added by dbt v2 extension (ensure dbt binary dir on PATH)
+if [[ ":$PATH:" != *":/Users/jordi/.local/bin:"* ]]; then
+  export PATH=/Users/jordi/.local/bin:"$PATH"
+fi
+# Added by dbt v2 extension
+alias dbtf=/Users/jordi/.local/bin/dbt
