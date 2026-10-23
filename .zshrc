@@ -1,53 +1,41 @@
-# 1. INITIALIZE HOMEBREW (Must be first)
-if [[ -f "/opt/homebrew/bin/brew" ]]; then
+# Every program referenced here is installed by the Brewfile (except SDKMAN, see
+# README) and each block is guarded, so a half-installed machine still gets a shell.
+
+# 1. HOMEBREW (must be first: sets PATH, HOMEBREW_PREFIX and FPATH for completions)
+if [[ -x /opt/homebrew/bin/brew ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# 2. PATH CONFIGURATION
+# 2. PATH: uv tools (homely, ruff, jupyter-lab, ...) and the dbt VS Code extension's dbt
 export PATH="$HOME/.local/bin:$PATH"
+# Docker Desktop's CLI tools (Docker.app also adds ~/.docker/bin via ~/.zprofile itself)
+export PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
 
-# 3. PYTHON / UV CONFIGURATION
-export PATH="$HOME/.local/bin:$PATH"
-if [[ -f "$HOME/.cargo/env" ]]; then
-    source "$HOME/.cargo/env"
-fi
+# 3. COMPLETIONS (after FPATH is complete, before plugins that wrap widgets)
+fpath=($HOME/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
 
-# 4. HOMEBREW PLUGINS
-# These were installed via BREW_FORMULAE in homely.py
-if [[ -d "$HOMEBREW_PREFIX/share/zsh-autosuggestions" ]]; then
-    source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-fi
+# 4. TOOLS
+export EDITOR='code --wait'
 
-if [[ -d "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting" ]]; then
-    source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-fi
-
-# 5. STARSHIP PROMPT
 if command -v starship &> /dev/null; then
     eval "$(starship init zsh)"
 fi
 
-# 6. ALIASES & USER CONFIG
-export EDITOR='code --wait'
+# 5. ALIASES
+# ~/.Brewfile is a symlink to the repo's Brewfile (homely.py), so --global finds it.
+alias upsync="brew update && brew upgrade && brew bundle --global && homely update && exec zsh"
+alias dbtf="$HOME/.local/bin/dbt"  # dbt v2 binary installed by the dbt VS Code extension
 
-alias upsync="brew update && brew upgrade && homely update && source ~/.zshrc"
-# alias py="python3"
-# ssh-add --apple-use-keychain ~/.ssh/id_ed25519 2>/dev/null
-# The following lines have been added by Docker Desktop to enable Docker CLI completions.
-fpath=($HOME/.docker/completions $fpath)
-autoload -Uz compinit
-(( ${+_comps[docker]} )) || compinit
-# End of Docker CLI completions
-
-
-export PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-# Added by dbt v2 extension (ensure dbt binary dir on PATH)
-if [[ ":$PATH:" != *":/Users/jordi/.local/bin:"* ]]; then
-  export PATH=/Users/jordi/.local/bin:"$PATH"
+# 6. ZSH PLUGINS (syntax highlighting must be sourced last, per its README)
+if [[ -f "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+    source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 fi
-# Added by dbt v2 extension
-alias dbtf=/Users/jordi/.local/bin/dbt
+if [[ -f "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
+    source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+fi
+
+# 7. SDKMAN: installed by hand (not on Homebrew); must stay at the end of the file.
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
