@@ -1,0 +1,16 @@
+# Global git config, symlinked to ~/.config/git/config (git reads it alongside
+# ~/.gitconfig, which wins on conflicts). The global excludes file is
+# ~/.config/git/ignore by default, so it needs no setting here.
+[user]
+	name = Jordi
+	email = is.maurice@protonmail.com
+	signingkey = ~/.ssh/id_ed25519.pub
+[core]
+	editor = code --wait
+# Every commit is SSH-signed: restore ~/.ssh/id_ed25519 before committing (README).
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	allowedSignersFile = ~/.ssh/allowed_signers
+[commit]
+	gpgsign = true
